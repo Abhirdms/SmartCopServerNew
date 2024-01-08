@@ -68,10 +68,8 @@ authRouter.post("/userlogin", async (req, res) => {
 
     const isMatch = crypto.createHash('sha256').update(password).digest('hex');
     if (isMatch  !== user.password) {
-      console.log("I am in after getting wrong password");
       return res.status(400).json({ msg: "Incorrect password." });
     }
-    console.log("did not give access");
 
 
 
