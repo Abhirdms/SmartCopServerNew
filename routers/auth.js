@@ -66,8 +66,10 @@ authRouter.post("/userlogin", async (req, res) => {
         .json({ msg: "User with this email does not exist!" });
     }
 
-    const isMatch = crypto.createHash('sha256').update(password).digest('hex');;
+    const isMatch = crypto.createHash('sha256').update(password).digest('hex');
     console.log("password entered");
+    console.log(password);
+    console.log("is match");
     console.log(isMatch);
     console.log("password in database");
     console.log(user.password);
@@ -76,6 +78,8 @@ authRouter.post("/userlogin", async (req, res) => {
     }
 
     const token = jwt.sign({ id: user._id }, "passwordKey");
+    console.log("token");
+    console.log(token);
     if (user.role === 'admin') {
       console.log("Admin login successful");
       res.json({ msg: 'Admin login successful', token,role: 'admin', ...user._doc });
