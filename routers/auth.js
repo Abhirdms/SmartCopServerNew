@@ -59,6 +59,10 @@ authRouter.post("/userlogin", async (req, res) => {
 
 
     const user = await User.findOne({ contact: phoneNumber });
+    console.log("password entered");
+    console.log(isMatch);
+    console.log("password in database");
+    console.log(user.password);
     if (!user) {
       return res
         .status(400)
