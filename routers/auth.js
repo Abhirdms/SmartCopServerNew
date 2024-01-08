@@ -67,16 +67,21 @@ authRouter.post("/userlogin", async (req, res) => {
     }
 
     const isMatch = crypto.createHash('sha256').update(password).digest('hex');
-    console.log("password entered");
-    console.log(password);
-    console.log("is match");
-    console.log(isMatch);
-    console.log("password in database");
-    console.log(user.password);
-    if (!isMatch) {
+    if (isMatch  !== user.password) {
+      console.log("I am in after getting wrong password");
       return res.status(400).json({ msg: "Incorrect password." });
     }
+    console.log("did not give access");
 
+
+
+
+
+
+
+
+
+    
     const token = jwt.sign({ id: user._id }, "passwordKey");
     console.log("token");
     console.log(token);
