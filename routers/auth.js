@@ -69,19 +69,6 @@ authRouter.post("/userlogin", async (req, res) => {
 
     const isMatch = crypto.createHash('sha256').update(password).digest('hex');
     if (isMatch  !== user.password ) {
-     console.log("in user");
-      console.log("isMatch");
-    console.log(isMatch);
-    console.log("admin.password");
-    console.log(admin.password);
-      return res.status(400).json({ msg: "Incorrect password." });
-    }
-    if (isMatch  !== admin.password ) {
-      console.log("in admin");
-      console.log("isMatch");
-    console.log(isMatch);
-    console.log("user.password");
-    console.log(user.password);
       return res.status(400).json({ msg: "Incorrect password." });
     }
 
