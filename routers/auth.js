@@ -68,7 +68,7 @@ authRouter.post("/userlogin", async (req, res) => {
     
 
     const isMatch = crypto.createHash('sha256').update(password).digest('hex');
-    if (isMatch  !== user.password ) {
+    if (user && isMatch  !== user.password ) {
       return res.status(400).json({ msg: "Incorrect password." });
     }
 
