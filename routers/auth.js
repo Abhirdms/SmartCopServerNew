@@ -44,42 +44,26 @@ authRouter.post("/userlogin", async (req, res) => {
   try {
     const { phoneNumber, password } = req.body;
 
-    const admin = await Admin.findOne({ contact: phoneNumber });
-     console.log("admin password before");
-     console.log("admin password");
-      console.log(admin);
-      console.log(admin.password);
-      console.log("var");
-    
-
-    if (admin && password === admin.password) {
-      console.log("admin in password");
-      console.log(admin);
-      console.log(admin.password);
-      // Admin login successful
-      const token = jwt.sign({ id: admin._id, isAdmin: true }, "passwordKey");
-      res.json({ token, ...admin._doc });
-      console.log('Admin login 1 successful');
-      return;
-    }
-
- console.log("admin password after");
-
-
-
     const user = await User.findOne({ contact: phoneNumber });
+    console.log(user);
+    console.log(user.password);
     
     if (!user) {
       return res
         .status(400)
         .json({ msg: "User with this Mobile Number does not exist!" });
     }
-    
 
-    const isMatch = crypto.createHash('sha256').update(password).digest('hex');
-    if (!isMatch) {
+    if (user.role == "admin" && password !== user.password) {
       return res.status(400).json({ msg: "Incorrect password." });
     }
+
+    const isMatch = crypto.createHash('sha256').update(password).digest('hex');
+      if (isMatch  !== user.password && user.role == "user") {
+      return res.status(400).json({ msg: "Incorrect password." });
+    }
+
+    
 
 
     
@@ -93,11 +77,11 @@ authRouter.post("/userlogin", async (req, res) => {
     const token = jwt.sign({ id: user._id }, "passwordKey");
      console.log("admin token");
     if (user.role === 'admin') {
-      console.log("Admin login 2 successful");
+      console.log("Admin login successful");
       res.json({ msg: 'Admin login successful', token,role: 'admin', ...user._doc });
     } else {
       res.json({ msg: 'User login successful', token,role: 'user', ...user._doc });
-      console.log("user login 3 successful");
+      console.log("user login successful");
     }
     // res.json({ token, ...user._doc });
     console.log(res);
