@@ -1,11 +1,9 @@
-
-const Parking=require('../model/parkingslot');
-
+const ParkingSlot = require('../model/parkingslot');
 const UserLocation = require('../model/userLocation');
 
 
 class UserLocationService {
-  static async addUserLocation(userId,latitude, longitude) {
+  static async addUserLocation(userId,name,post,contact ,policeStation,latitude, longitude) {
     try {
 
       let existingUserLocation = await UserLocation.findOne({ userId: userId });
@@ -20,6 +18,10 @@ class UserLocationService {
       } else {
         const newUserLocation = new UserLocation({
           userId: userId,
+          name: name,
+          post: post,
+          contact: contact,
+          policeStation: policeStation,
           location: {
             type: 'Point',
             coordinates: [longitude, latitude],
@@ -55,10 +57,9 @@ class UserLocationService {
       throw error; 
     }
   }
-
   static async getParkingNearby(latitude, longitude, maxDistance) {
     try {
-      const nearbyUsers = await Parking.find({
+      const nearbyParking = await ParkingSlot.find({
         location: {
           $near: {
             $geometry: {
@@ -69,17 +70,13 @@ class UserLocationService {
           },
         },
       });
-      console.log('Users nearby retrieved from the database:', nearbyUsers);
+      console.log('Parking nearby retrieved from the database:', nearbyUsers);
       return nearbyUsers;
     } catch (error) {
       console.error('Error retrieving nearby users:', error);
-      throw error; // Propagate the error to the caller
+      throw error; 
     }
   }
-
-
 }
-
-
 
 module.exports = UserLocationService;
