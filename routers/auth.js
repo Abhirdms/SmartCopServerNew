@@ -47,10 +47,13 @@ authRouter.post("/userlogin", async (req, res) => {
     const admin = await Admin.findOne({ contact: phoneNumber });
 
     if (admin && password === admin.password) {
+      console.log("admin password");
+      console.log(admin);
+      console.log(admin.password);
       // Admin login successful
       const token = jwt.sign({ id: admin._id, isAdmin: true }, "passwordKey");
       res.json({ token, ...admin._doc });
-      console.log('Admin login successful');
+      console.log('Admin login 1 successful');
       return;
     }
 
@@ -85,11 +88,11 @@ authRouter.post("/userlogin", async (req, res) => {
     console.log("token");
     console.log(token);
     if (user.role === 'admin') {
-      console.log("Admin login successful");
+      console.log("Admin login 2 successful");
       res.json({ msg: 'Admin login successful', token,role: 'admin', ...user._doc });
     } else {
       res.json({ msg: 'User login successful', token,role: 'user', ...user._doc });
-      console.log("user login successful");
+      console.log("user login3 successful");
     }
     // res.json({ token, ...user._doc });
     console.log(res);
