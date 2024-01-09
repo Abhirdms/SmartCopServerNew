@@ -8,6 +8,11 @@ const mongoose = require('mongoose');
 // });
 const userLocationSchema = new mongoose.Schema({
   userId: { type: String, required: true },
+  name: { type: String, required: true },
+  post: { type: String, required: true },
+  contact: { type: String, required: true },
+  policeStation: { type: String, required: true },
+ 
   location: {
     type: {
       type: String,
