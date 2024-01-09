@@ -46,9 +46,14 @@ authRouter.post("/userlogin", async (req, res) => {
 
     const admin = await Admin.findOne({ contact: phoneNumber });
      console.log("admin password before");
+     console.log("admin password");
+      console.log(admin);
+      console.log(admin.password);
+      console.log("var");
+    
 
     if (admin && password === admin.password) {
-      console.log("admin password");
+      console.log("admin in password");
       console.log(admin);
       console.log(admin.password);
       // Admin login successful
