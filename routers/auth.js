@@ -65,14 +65,24 @@ authRouter.post("/userlogin", async (req, res) => {
         .status(400)
         .json({ msg: "User with this email does not exist!" });
     }
+    console.log("user.password");
+    console.log(user.password);
+    console.log("admin.password");
+    console.log(admin.password);
+    console.log("Before");
 
     const isMatch = crypto.createHash('sha256').update(password).digest('hex');
-    if (isMatch  !== user.password) {
+    if (isMatch  !== user.password || isMatch  !== admin.password ) {
       return res.status(400).json({ msg: "Incorrect password." });
     }
 
 
-
+    console.log("isMatch");
+    console.log(isMatch);
+    console.log("user.password");
+    console.log(user.password);
+    console.log("admin.password");
+    console.log(admin.password);
 
 
 
