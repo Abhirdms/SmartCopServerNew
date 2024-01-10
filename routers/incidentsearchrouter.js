@@ -20,9 +20,13 @@ router.get('/searching', async (req, res) => {
 
 router.get('/crimenumb', async (req, res) => {
   try {
-    const results = await Incident.find({}); // Adjust the query as needed
-    res.json(results);
-    console.log(results);
+    const results = await Incident.find({ crimeNumber: { $exists: true, $ne: null, $ne: "" } });
+    // const filteredResults = results.filter(doc => doc.crimeNumber !== null && doc.crimeNumber !== undefined && doc.crimeNumber !== '');
+
+    res.json(results); 
+    console.log("showing");// Adjust the query as needed
+    // res.json(results);
+    // console.log("this is ",filteredResults);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
