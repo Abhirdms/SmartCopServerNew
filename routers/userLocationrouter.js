@@ -9,6 +9,11 @@ router.post("/userLocation", UserLocationController.updateUserLocation);
 // Define endpoint for fetching nearby users
 router.get("/fetchNearbyUsers", UserLocationController.getUsersNearby);
 router.get("/fetchNearbyParking", UserLocationController.getParkingNearby);
+// khusi added two roters
+router.get("/fetchNearbyTowerpage", UserLocationController.getTowerpageNearby);
+router.get("/fetchNearbyCctvpage", UserLocationController.getCctvpageNearby);
+
+
 
 
 
