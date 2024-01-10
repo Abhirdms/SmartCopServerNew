@@ -22,19 +22,26 @@ module.exports = {
             },
             address: data.Address,
           });
-        })
-        .on('end', async () => {
+        }).on('end', async () => {
           // Save data to the database
           const result = await Parking.create(results);
-          return { message: 'File uploaded and data saved successfully', data: result };
+          resolve({ success: true, message: 'File uploaded and data saved successfully', data: result });
+        })
+        .on('error', (error) => {
+          reject(error);
         });
+      //   .on('end', async () => {
+      //     // Save data to the database
+      //     const result = await Parking.create(results);
+      //     resolve({ success: true, message: 'File uploaded and data saved successfully', data: result });
+      //   });
 
-      return new Promise((resolve, reject) => {
-        // Handle any errors during CSV processing
-        process.on('unhandledRejection', (reason, promise) => {
-          reject(reason);
-        });
-      });
+      // return new Promise((resolve, reject) => {
+      //   // Handle any errors during CSV processing
+      //   process.on('unhandledRejection', (reason, promise) => {
+      //     reject(reason);
+      //   });
+      // });
     } catch (error) {
       throw error;
     }
