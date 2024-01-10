@@ -63,7 +63,50 @@ class UserLocationController {
       res.status(500).send('Internal Server Error');
     }
   }
-  
+  static async getTowerpageNearby(req, res) {
+    console.log("in getparkingby");
+    const { latitude, longitude, maxDistance } = req.query;
+    
+    try {
+      if (!latitude || !longitude || !maxDistance) {
+        return res.status(400).send('Invalid request. Missing required parameters.');
+      }
+
+      const nearbyUsers = await UserLocationService.getTowerpageNearby(parseFloat(latitude), parseFloat(longitude), parseFloat(maxDistance));
+
+      if (nearbyUsers.length > 0) {
+        res.status(200).json(nearbyUsers);
+      } else {
+        res.status(404).send('No nearby parkings found');
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
+  }
+
+  static async getCctvpageNearby(req, res) {
+    console.log("in getparkingby");
+    const { latitude, longitude, maxDistance } = req.query;
+    
+    try {
+      if (!latitude || !longitude || !maxDistance) {
+        return res.status(400).send('Invalid request. Missing required parameters.');
+      }
+
+      const nearbyUsers = await UserLocationService.getCctvpageNearby(parseFloat(latitude), parseFloat(longitude), parseFloat(maxDistance));
+
+      if (nearbyUsers.length > 0) {
+        res.status(200).json(nearbyUsers);
+      } else {
+        res.status(404).send('No nearby parkings found');
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
+  }
+ 
 }
 
 
