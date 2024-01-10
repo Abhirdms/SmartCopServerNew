@@ -1,5 +1,7 @@
 const ParkingSlot = require('../model/parkingslot');
 const UserLocation = require('../model/userLocation');
+const Towerpage=require('../model/towerpage');
+const Cctvpage=require('../model/cctvpage');
 
 
 class UserLocationService {
@@ -75,6 +77,47 @@ class UserLocationService {
     } catch (error) {
       console.error('Error retrieving nearby users:', error);
       throw error; 
+    }
+  }
+  static async getTowerpageNearby(latitude, longitude, maxDistance) {
+    try {
+      const nearbyUsers = await Towerpage.find({
+        location: {
+          $near: {
+            $geometry: {
+              type: 'Point',
+              coordinates: [longitude, latitude],
+            },
+            $maxDistance: maxDistance,
+          },
+        },
+      });
+      console.log('Users nearby retrieved from the database:', nearbyUsers);
+      return nearbyUsers;
+    } catch (error) {
+      console.error('Error retrieving nearby users:', error);
+      throw error; // Propagate the error to the caller
+    }
+  }
+
+  static async getCctvpageNearby(latitude, longitude, maxDistance) {
+    try {
+      const nearbyUsers = await Cctvpage.find({
+        location: {
+          $near: {
+            $geometry: {
+              type: 'Point',
+              coordinates: [longitude, latitude],
+            },
+            $maxDistance: maxDistance,
+          },
+        },
+      });
+      console.log('Users nearby retrieved from the database:', nearbyUsers);
+      return nearbyUsers;
+    } catch (error) {
+      console.error('Error retrieving nearby users:', error);
+      throw error; // Propagate the error to the caller
     }
   }
 }
