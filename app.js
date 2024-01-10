@@ -39,7 +39,9 @@ const RobberyRouter=require('./routers/robberyrouter');
 const DacoityRouter=require('./routers/dacoityrouter');
 const HarassRouter=require('./routers/harassrouter');
 const vehicleLocationRouter = require('./routers/vehicleLocationrouter');
-// const authRouter=require('./routers/auth');
+const towerPageRouter = require('./routers/towerpagerouter');
+const cctvPageRouter = require('./routers/cctvpagerouter');
+
 
 
 
@@ -86,6 +88,8 @@ app.use('/', userLocationRouter);
 app.use('/', vehicleLocationRouter);
 app.use('/',parkingSlotRouter);
 app.use('/',visitorRouter);
+app.use('/',towerPageRouter);
+app.use('/',cctvPageRouter);
 app.use(express.json());
 
 // Middleware to parse form data
