@@ -17,7 +17,7 @@ module.exports = {
   "Occurancetime",
   "Registerdate",
   "Lat",
-  "Lat",
+  "Long",
  
       ];
       let actualColumns;
@@ -27,7 +27,7 @@ module.exports = {
         .on('data', (data) => {
 
           if (!actualColumns) {
-            actualColumns = Object.keys(data).map(column => column.toLowerCase());
+            actualColumns = Object.keys(data).map(column => column.toLowerCase().trim());
           }
 
           const missingColumns = expectedColumns
