@@ -16,7 +16,7 @@ module.exports = {
   "Occurancetime",
   "Registerdate",
   "Lat",
-  "Lng",
+  "Long",
  
       ];
       let actualColumns;
