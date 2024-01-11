@@ -18,7 +18,7 @@ module.exports = {
       }
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: 'File upload failed' });
+      return res.status(500).json({ error: error.message || 'Internal Server Error' });
     }
   },
 };
