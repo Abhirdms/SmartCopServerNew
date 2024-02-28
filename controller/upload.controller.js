@@ -14,7 +14,7 @@
 const uploadService = require('../services/upload.service');
 
 module.exports = {
-  uploadFile: async (req, res) => {
+   uploadFile: async (req, res) => {
     try {
       if (!req.file) {
         return res.status(400).json({ error: 'No file provided' });
