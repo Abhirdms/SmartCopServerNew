@@ -93,6 +93,7 @@ module.exports = {
           "Occurancedate",
           "Occurancetime",
           "Registerdate",
+         "Description",
           "Lat",
           "Long",
         ];
