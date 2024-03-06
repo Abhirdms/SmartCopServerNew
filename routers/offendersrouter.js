@@ -42,6 +42,50 @@ router.get("/searchVisitor", async (req, res) => {
   res.json(results);
   console.log(results);
 });
+router.post("/deleteOffenders", async (req, res) => {
+  try {
+    const offenderIdsToDelete = req.body.offenderIds;
+    console.log(offenderIdsToDelete); // Assuming offenderIds is an array of offender IDs to delete
+
+    // Ensure offenderIdsToDelete is an array
+    if (!Array.isArray(offenderIdsToDelete)) {
+      return res.status(400).json({ error: 'Invalid request. offenderIds must be an array.' });
+    }
+
+    for (const offenderId of offenderIdsToDelete) {
+      await Offender.findByIdAndDelete(offenderId);
+    }
+
+    res.status(200).json({ message: 'Offenders deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting offenders:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+router.post('/updateOffender', async (req, res) => {
+  try {
+    const { offenderId, updatedValues } = req.body;
+    console.log(offenderId);
+
+    // Ensure required fields are present
+    if (!offenderId || !updatedValues) {
+      return res.status(400).json({ error: 'Invalid request. Please provide offenderId and updatedValues.' });
+    }
+
+    // Find and update the offender
+    const updatedOffender = await Offender.findByIdAndUpdate(offenderId, updatedValues, { new: true });
+
+    if (!updatedOffender) {
+      return res.status(404).json({ error: 'Offender not found' });
+    }
+
+    res.status(200).json({ message: 'Offender updated successfully', updatedOffender });
+  } catch (error) {
+    console.error('Error updating offender:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 
 module.exports = router;
