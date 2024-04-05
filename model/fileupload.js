@@ -5,14 +5,17 @@ const mySchema = new mongoose.Schema({
   Name: String,
   Dob: String,  // Assuming it's a Unix timestamp
   Gender: String,
-  PrisonerCode: String,
-  JailSerialNo: String,
+  Jailserialno: String,
   Crimenosection:String,
   Policestation:String,
   Dateofarrest:String,
   Dateofrelease:String,
-  MajorHead: String,
-  MinorHead: String,
+  Majorhead: String,
+  Minorhead: String,
+  Mobileno:String,
+  Address:String,
+  Previouscrime: String,
+  Action:String
 });
 
 module.exports = mongoose.model('MyModel', mySchema);
