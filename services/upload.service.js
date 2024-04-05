@@ -219,6 +219,7 @@
 
 
 
+
 const fs = require('fs');
 const xlsx = require('xlsx');
 const MyModel = require('../model/fileupload');
@@ -295,9 +296,11 @@ module.exports = {
           // Iterate over each column in the row
           for (let j = 0; j < expectedColumns.length; j++) {
             const columnName = expectedColumns[j];
-            const cellValue = row[i][j] || ''; // Use empty string if cell value is empty
+            const cellValue = row[j] || '';
+            console.log("This is the cell:", cellValue); // Use empty string if cell value is empty
             rowData[columnName] = cellValue;
           }
+          console.log(rowData);
 
           // Save the rowData to MongoDB
           const result = await MyModel.create(rowData);
@@ -313,6 +316,5 @@ module.exports = {
     });
   },
 };
-
 
 
