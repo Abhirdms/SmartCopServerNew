@@ -243,7 +243,7 @@ module.exports = {
         // Define expected columns and their sequence
         const expectedColumns = [
           'Name',
-          'Dob',
+          'Age',
           'Gender',
           'Jailserialno',
           'Crimenosection',
