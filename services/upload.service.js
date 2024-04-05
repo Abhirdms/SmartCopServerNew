@@ -259,7 +259,7 @@ module.exports = {
 
         // Find the header row
         let headerRowIndex = -1;
-        console.log(rows.length)
+        console.log(rows.length);
         for (let i = 0; i < rows.length; i++) {
           const row = rows[i];
           const foundColumns = row.filter(cell => expectedColumns.includes(cell));
@@ -276,8 +276,8 @@ module.exports = {
         }
 
         // Check if all expected columns are present in the header row
-        const headerRow = rows[headerRowIndex];
-        const missingColumns = expectedColumns.filter(column => !headerRow.includes(column));
+        const headerRow = rows[headerRowIndex].map(cell => cell.toLowerCase()); // Convert header cells to lowercase
+        const missingColumns = expectedColumns.filter(column => !headerRow.includes(column.toLowerCase())); // Convert expected column names to lowercase for comparison
 
         if (missingColumns.length > 0) {
           // Some expected columns are missing in the header row
@@ -293,9 +293,9 @@ module.exports = {
           const row = rows[i];
 
           // Iterate over each column in the row
-          for (let j = 0; j < row.length; j++) {
+          for (let j = 0; j < expectedColumns.length; j++) {
             const columnName = expectedColumns[j];
-            const cellValue = rows[i][j] || ''; // Use empty string if cell value is empty
+            const cellValue = row[j] || ''; // Use empty string if cell value is empty
             rowData[columnName] = cellValue;
           }
 
