@@ -258,12 +258,14 @@ module.exports = {
           'Action',
         ];
 
+            const expectedColumnsLowercase = expectedColumns.map(column => column.toLowerCase());
+
         // Find the header row
         let headerRowIndex = -1;
         console.log(rows.length);
         for (let i = 0; i < rows.length; i++) {
-          const row = rows[i];
-          const foundColumns = row.filter(cell => expectedColumns.includes(cell));
+          const row = rows[i].map(cell => cell.toLowerCase());
+          const foundColumns = row.filter(cell => expectedColumnsLowercase.includes(cell));
           if (foundColumns.length >= 5) {
             headerRowIndex = i;
             break;
