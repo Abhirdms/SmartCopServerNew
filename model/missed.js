@@ -5,11 +5,11 @@ const mySchema = new mongoose.Schema({
   Name: String,
   Age: String,  // Assuming it's a Unix timestamp
   Gender: String,
-  MissingDate: String,
-  MissingPlace: String,
+  Missingdate: String,
+  Missingplace: String,
   Height: String,
-  HighQualityPhotographs: String,
-  MissingRegno: String,
+  Highqualityphotographs: String,
+  Missingregno: String,
   Policestation: String,
 });
 
