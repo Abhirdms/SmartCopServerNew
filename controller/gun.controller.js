@@ -9,10 +9,10 @@ module.exports = {
 
       const result = await uploadService.processUpload(req.file);
 
-      if (result.success) {
+      if (result.message) {
         return res.status(200).json({ message: result.message, data: result.data });
       } else {
-        return res.status(500).json({ error: 'File upload failed', details: result.error.message });
+        return res.status(500).json({ error: 'File upload failed' });
       }
     } catch (error) {
       console.error(error);
