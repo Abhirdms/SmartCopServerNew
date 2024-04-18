@@ -13,7 +13,7 @@ const cctvSchema = new mongoose.Schema({
     },
   },
    Address: String,
-   Cellid: String,
+   POC: String,
 });
 
 // Index the location field for geospatial queries
