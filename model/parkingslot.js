@@ -12,7 +12,7 @@ const towerSchema = new mongoose.Schema({
       required: true,
     },
   },
-  address: String,
+  Address: String,
 });
 
 // Index the location field for geospatial queries
