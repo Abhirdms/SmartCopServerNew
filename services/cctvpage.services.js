@@ -76,7 +76,7 @@ module.exports = {
         const rows = xlsx.utils.sheet_to_json(sheet, { header: 1 }); // Convert sheet to JSON array
 
         // Define expected columns and their sequence
-        const expectedColumns = ['Lat', 'Long', 'Address','Cellid'];
+        const expectedColumns = ['Lat', 'Long', 'Address','POC'];
         const expectedColumnsLowercase = expectedColumns.map(column => column.toLowerCase());
 
         // Find the header row
@@ -131,7 +131,7 @@ module.exports = {
               coordinates: [longitude, latitude],
             },
             Address: rowData['Address'],
-            Cellid: rowData['Cellid'],
+            POC: rowData['POC'],
           });
         }
 
