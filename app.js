@@ -41,6 +41,7 @@ const HarassRouter=require('./routers/harassrouter');
 const vehicleLocationRouter = require('./routers/vehicleLocationrouter');
 const towerPageRouter = require('./routers/towerpagerouter');
 const cctvPageRouter = require('./routers/cctvpagerouter');
+const fcmtokenRouter = require('./routers/usertokenrouter');
 
 
 
@@ -90,6 +91,7 @@ app.use('/',parkingSlotRouter);
 app.use('/',visitorRouter);
 app.use('/',towerPageRouter);
 app.use('/',cctvPageRouter);
+app.use('/', fcmtokenRouter);
 app.use(express.json());
 
 // Middleware to parse form data
