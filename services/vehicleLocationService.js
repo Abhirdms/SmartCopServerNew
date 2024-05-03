@@ -32,7 +32,7 @@ class VehicleLocationService {
   // }
 
   // Add a method to get nearby vehicles based on location
-  static async getVehiclesNearby(latitude, longitude, maxDistance) {
+  static async getVehiclesNearby(latitude, longitude, maxDistance,userIdToExclude) {
     try {
       const nearbyVehicles = await UserLocation.find({
         post: 'Police Driver',
@@ -45,6 +45,7 @@ class VehicleLocationService {
             $maxDistance: maxDistance,
           },
         },
+        userId: { $ne: userIdToExclude }
       });
       console.log('Vehicles nearby retrieved from the database:', nearbyVehicles);
       return nearbyVehicles;
