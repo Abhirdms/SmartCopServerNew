@@ -2,7 +2,7 @@ const VehicleLocationService = require('../services/vehicleLocationService');
 
 class VehicleLocationController {
   static async updateVehicleLocation(req, res) {
-    const { vehicleId, latitude, longitude } = req.body;
+    const { vehicleId, latitude, longitude,userIdToExclude } = req.body;
     try {
       if (!vehicleId || !latitude || !longitude) {
         return res.status(400).send('Invalid request. Missing required fields.');
@@ -22,14 +22,15 @@ class VehicleLocationController {
   }
   static async getVehiclesNearby(req, res) {
     console.log("in getvehiclesnearby");
-    const { latitude, longitude, maxDistance } = req.query;
+    const { latitude, longitude, maxDistance,userIdToExclude } = req.query;
     
     try {
       if (!latitude || !longitude || !maxDistance) {
         return res.status(400).send('Invalid request. Missing required parameters.');
       }
 
-      const nearbyVehicles = await VehicleLocationService.getVehiclesNearby(parseFloat(latitude), parseFloat(longitude), parseFloat(maxDistance));
+      const nearbyVehicles = await VehicleLocationService.getVehiclesNearby(parseFloat(latitude), parseFloat(longitude),
+                                                                            parseFloat(maxDistance),userIdToExclude);
 
       if (nearbyVehicles.length > 0) {
         res.status(200).json(nearbyVehicles);
