@@ -41,7 +41,7 @@ class UserLocationService {
     }
   }
 
-  static async getUsersNearby(latitude, longitude, maxDistance) {
+  static async getUsersNearby(latitude, longitude, maxDistance,userIdToExclude) {
     try {
       const nearbyUsers = await UserLocation.find({
         location: {
@@ -53,6 +53,7 @@ class UserLocationService {
             $maxDistance: maxDistance,
           },
         },
+        userId: { $ne: userIdToExclude }
       });
       console.log('Users nearby retrieved from the database:', nearbyUsers);
       return nearbyUsers;
