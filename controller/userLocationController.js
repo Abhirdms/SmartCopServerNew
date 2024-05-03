@@ -21,14 +21,15 @@ class UserLocationController {
     }
   }
   static async getUsersNearby(req, res) {
-    const { latitude, longitude, maxDistance } = req.query;
+    const { latitude, longitude, maxDistance,userIdToExclude } = req.query;
     
     try {
       if (!latitude || !longitude || !maxDistance) {
         return res.status(400).send('Invalid request. Missing required parameters.');
       }
 
-      const nearbyUsers = await UserLocationService.getUsersNearby(parseFloat(latitude), parseFloat(longitude), parseFloat(maxDistance));
+      const nearbyUsers = await UserLocationService.getUsersNearby(parseFloat(latitude), parseFloat(longitude),
+                                                                   parseFloat(maxDistance),userIdToExclude);
 
       if (nearbyUsers.length > 0) {
         res.status(200).json(nearbyUsers);
