@@ -42,6 +42,7 @@ const vehicleLocationRouter = require('./routers/vehicleLocationrouter');
 const towerPageRouter = require('./routers/towerpagerouter');
 const cctvPageRouter = require('./routers/cctvpagerouter');
 const fcmtokenRouter = require('./routers/usertokenrouter');
+const buzzRouter = require('./routers/buzzrouter');
 
 
 
@@ -92,6 +93,7 @@ app.use('/',visitorRouter);
 app.use('/',towerPageRouter);
 app.use('/',cctvPageRouter);
 app.use('/', fcmtokenRouter);
+app.use('/', buzzRouter);
 app.use(express.json());
 
 // Middleware to parse form data
