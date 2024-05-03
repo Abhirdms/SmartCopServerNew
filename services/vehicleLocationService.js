@@ -1,4 +1,4 @@
-const VehicleLocation = require('../model/vehicleLocation');
+const UserLocation = require('../model/userLocation');
 
 class VehicleLocationService {
   // static async addVehicleLocation(vehicleId,latitude, longitude) {
@@ -34,7 +34,8 @@ class VehicleLocationService {
   // Add a method to get nearby vehicles based on location
   static async getVehiclesNearby(latitude, longitude, maxDistance) {
     try {
-      const nearbyVehicles = await VehicleLocation.find({
+      const nearbyVehicles = await UserLocation.find({
+        post: 'Police Driver',
         location: {
           $near: {
             $geometry: {
