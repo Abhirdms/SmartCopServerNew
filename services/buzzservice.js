@@ -1,6 +1,6 @@
 const UserLocationService = require('../services/userLocationService');
 const UserToken = require('../model/usertoken');
-// var admin= require("firebase-admin");
+var admin= require("firebase-admin");
 
 
 class BuzzService {
