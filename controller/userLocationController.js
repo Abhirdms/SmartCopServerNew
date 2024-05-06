@@ -20,7 +20,7 @@ class UserLocationController {
       res.status(500).send('Internal Server Error');
     }
   }
-  static async getUsersNearby(req, res) {
+ static async getUsersNearby(req, res) {
     const { latitude, longitude, maxDistance,userIdToExclude } = req.query;
     
     try {
@@ -28,8 +28,11 @@ class UserLocationController {
         return res.status(400).send('Invalid request. Missing required parameters.');
       }
 
-      const nearbyUsers = await UserLocationService.getUsersNearby(parseFloat(latitude), parseFloat(longitude),
-                                                                   parseFloat(maxDistance),userIdToExclude);
+      const nearbyUsers = await UserLocationService.getUsersNearby(parseFloat(latitude),
+       parseFloat(longitude),
+        parseFloat(maxDistance),
+        userIdToExclude
+      );
 
       if (nearbyUsers.length > 0) {
         res.status(200).json(nearbyUsers);
