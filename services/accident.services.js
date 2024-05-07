@@ -205,15 +205,51 @@ module.exports = {
           return;
         }
 
+       function excelSerialNumberToDate(serial) {
+          const utcDays = Math.floor(serial - 25569);
+          const utcValue = utcDays * 86400;
+          const dateInfo = new Date(utcValue * 1000);
+      
+          const day = String(dateInfo.getDate()).padStart(2, '0');
+          const month = String(dateInfo.getMonth() + 1).padStart(2, '0');
+          const year = dateInfo.getFullYear();
+      
+          return `${day}-${month}-${year}`;
+      }
+
+      function parseTimeToExcelSerialNumber(serialNumber) {
+        // Split the time string into hours and minutes
+        const hours = Math.floor(serialNumber * 24);
+        const minutes = Math.round((serialNumber * 24 * 60) % 60);
+      
+        // Format the hours and minutes into a time string
+        const formattedHours = String(hours).padStart(2, '0'); // Ensure two digits for hours
+        const formattedMinutes = String(minutes).padStart(2, '0'); // Ensure two digits for minutes
+      
+        // Return the time string in HH:MM format
+        return `${formattedHours}:${formattedMinutes}`;
+      }
+      
+
         // Extract data from rows starting from the row after the header
         for (let i = headerRowIndex + 1; i < rows.length; i++) {
           const rowData = {};
           const row = rows[i];
+         const isEmptyRow = row.every(cell => cell === '');
+          if (isEmptyRow) {
+            continue;
+          }
 
           // Iterate over each column in the row
           for (let j = 0; j < expectedColumns.length; j++) {
             const columnName = expectedColumns[j];
-            const cellValue = row[j] || '';
+            let cellValue = row[j] || '';
+            if (columnName === 'Occurancetime') {
+              // Parse the time string and convert it into an Excel serial number
+              cellValue = parseTimeToExcelSerialNumber(cellValue);
+            } else if (columnName === 'Occurancedate' || columnName === 'Registerdate') {
+              cellValue = excelSerialNumberToDate(cellValue);
+          }
             console.log("This is the cell:", cellValue); // Use empty string if cell value is empty
             rowData[columnName] = cellValue;
           }
