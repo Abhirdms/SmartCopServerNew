@@ -34,11 +34,11 @@ module.exports = {
     if (result.message) {
       return res.status(200).json({ message: result.message, data: result.data });
     } else {
-      return res.status(500).json({ error: 'File upload failed' });
+      return res.status(500).json({ error: error.message , data: error.data});
     }
   } catch (error) {
     console.error(error);
-   res.status(500).json({ error: error.message || 'Internal Server Error' });
+    return res.status(500).json({ error: error.message ,data: error.data });
   }
   },
 };
