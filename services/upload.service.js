@@ -220,6 +220,7 @@
 
 
 
+
 const fs = require('fs');
 const xlsx = require('xlsx');
 const MyModel = require('../model/fileupload');
@@ -258,7 +259,7 @@ module.exports = {
           'Action',
         ];
 
-            const expectedColumnsLowercase = expectedColumns.map(column => column.toLowerCase());
+        const expectedColumnsLowercase = expectedColumns.map(column => column.toLowerCase());
 
         // Find the header row
         let headerRowIndex = -1;
@@ -274,7 +275,8 @@ module.exports = {
 
         if (headerRowIndex === -1) {
           // Expected columns not found in the header row
-          reject(new Error('Expected columns not found in the header row'));
+          const errorMessage = `Columns as per mentioned is not same`;
+          reject(new Error(errorMessage));
           return;
         }
 
@@ -290,15 +292,38 @@ module.exports = {
           return;
         }
 
+        function excelSerialNumberToDate(serial) {
+          const utcDays = Math.floor(serial - 25569);
+          const utcValue = utcDays * 86400;
+          const dateInfo = new Date(utcValue * 1000);
+      
+          const day = String(dateInfo.getDate()).padStart(2, '0');
+          const month = String(dateInfo.getMonth() + 1).padStart(2, '0');
+          const year = dateInfo.getFullYear();
+      
+          return `${day}-${month}-${year}`;
+      }
+
         // Extract data from rows starting from the row after the header
         for (let i = headerRowIndex + 1; i < rows.length; i++) {
           const rowData = {};
           const row = rows[i];
 
+          const isEmptyRow = row.every(cell => cell === '');
+          if (isEmptyRow) {
+            continue;
+          }
+
+  // Skip saving the row if all cell values are empty
+  
+
           // Iterate over each column in the row
           for (let j = 0; j < expectedColumns.length; j++) {
             const columnName = expectedColumns[j];
-            const cellValue = row[j] || '';
+            let cellValue = row[j] || '';
+            if (columnName === 'Dateofarrest' || columnName === 'Dateofrelease') {
+              cellValue = excelSerialNumberToDate(cellValue);
+          }
             console.log("This is the cell:", cellValue); // Use empty string if cell value is empty
             rowData[columnName] = cellValue;
           }
