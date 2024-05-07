@@ -264,7 +264,7 @@ module.exports = {
         let headerRowIndex = -1;
         console.log(rows.length);
         for (let i = 0; i < rows.length; i++) {
-          const row = rows[i].map(cell => cell.toLowerCase());
+          const row = rows[i].map(cell => typeof cell === 'string' ? cell.toLowerCase() : cell);
           const foundColumns = row.filter(cell => expectedColumnsLowercase.includes(cell));
           if (foundColumns.length >= 5) {
             headerRowIndex = i;
