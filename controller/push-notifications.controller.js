@@ -27,6 +27,11 @@ async function sendNotification(tokens, userIds, title, body) {
         title: title,
         body: body,
       },
+      android: {
+          notification: {
+            channelId: '1' // Set your channel ID here
+          }
+        }
     };
     
 
