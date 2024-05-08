@@ -49,6 +49,11 @@ async function sendPushNotification(tokens,latitude, longitude) {
           title: 'New Alert',
           body: 'A new alert has been issued.',
         },
+        android: {
+          notification: {
+            channelId: '1' // Set your channel ID here
+          }
+        }
       };
   
       // Send the message
