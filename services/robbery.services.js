@@ -204,6 +204,9 @@ module.exports = {
         }
 
         function excelSerialNumberToDate(serial) {
+          if (serial === '') {
+           return ''; // Return empty string for empty cell values
+           }
           const utcDays = Math.floor(serial - 25569);
           const utcValue = utcDays * 86400;
           const dateInfo = new Date(utcValue * 1000);
@@ -216,6 +219,9 @@ module.exports = {
       }
 
       function parseTimeToExcelSerialNumber(serialNumber) {
+        if (serialNumber === '') {
+           return ''; // Return empty string for empty cell values
+           }
         // Split the time string into hours and minutes
         const hours = Math.floor(serialNumber * 24);
         const minutes = Math.round((serialNumber * 24 * 60) % 60);
