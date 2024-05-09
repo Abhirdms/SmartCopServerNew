@@ -51,7 +51,8 @@ async function sendPushNotification(tokens,latitude, longitude) {
         },
         android: {
           notification: {
-            channelId: '1' // Set your channel ID here
+            channelId: '1',
+            sound: 'buzzsound'// Set your channel ID here
           }
         }
       };
