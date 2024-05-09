@@ -293,6 +293,9 @@ module.exports = {
         }
 
         function excelSerialNumberToDate(serial) {
+          if (serial === '') {
+           return ''; // Return empty string for empty cell values
+           }
           const utcDays = Math.floor(serial - 25569);
           const utcValue = utcDays * 86400;
           const dateInfo = new Date(utcValue * 1000);
