@@ -516,9 +516,21 @@ class OffenderService {
   }
 
   static processOffenderUpload(file) {
-    return new Promise(async (resolve, reject) => {
+   return new Promise(async (resolve, reject) => {
       try {
-        const results = [];
+        if (!file.originalname.endsWith('.xlsx')) {
+          // Unsupported file type
+          reject(new Error('Unsupported file type'));
+          return;
+        }
+
+        const buffer = fs.readFileSync(file.path);
+        const workbook = xlsx.read(buffer, { type: 'buffer' });
+
+        const sheet = workbook.Sheets[workbook.SheetNames[0]]; // Get the first sheet
+        const rows = xlsx.utils.sheet_to_json(sheet, { header: 1 }); // Convert sheet to JSON array
+
+        // Define expected columns and their sequence
         const expectedColumns = [
           "name",
           "aliasName",
@@ -526,64 +538,74 @@ class OffenderService {
           "crimeSubHead",
           "mo",
           "crimeNumber",
-          "fpsNumber",
+          "mobileno",
+          "address",
           "state",
           "district",
           "policeStation",
-          "latLon",
+          "lat",
+          "long",
+          "action",
           "highqualityphotographs"
         ];
 
-        const buffer = fs.readFileSync(file.path);
-        const workbook = xlsx.read(buffer, { type: 'buffer' });
+        const expectedColumnsLowercase = expectedColumns.map(column => column.toLowerCase());
 
-        const sheet = workbook.Sheets[workbook.SheetNames[0]];
-        const excelData = xlsx.utils.sheet_to_json(sheet);
+        // Find the header row
+        let headerRowIndex = -1;
+        console.log(rows.length);
+        for (let i = 0; i < rows.length; i++) {
+          // const row = rows[i].map(cell => cell.trim().toLowerCase());
+          const row = rows[i].map(cell => typeof cell === 'string' ? cell.trim().toLowerCase() : cell);
 
-        let actualColumns;
-
-        for (const data of excelData) {
-          if (!actualColumns) {
-            actualColumns = Object.keys(data).map(column => column.toLowerCase());
+          const foundColumns = row.filter(cell => expectedColumnsLowercase.includes(cell));
+          if (foundColumns.length >= 5) {
+            headerRowIndex = i;
+            break;
           }
-
-          // Handle missing columns
-          const missingColumns = expectedColumns
-            .filter((column) => !actualColumns.includes(column.toLowerCase()));
-
-          if (missingColumns.length > 0) {
-            const errorMessage = `Missing columns: ${missingColumns.join(', ')}`;
-            console.error(errorMessage);
-            reject(new Error(errorMessage));
-            return;
-          }
-
-          // Correct the format and match the case
-          const transformedData = {};
-          expectedColumns.forEach((column) => {
-            const columnIndex = actualColumns.indexOf(column.toLowerCase());
-            transformedData[column] = data[Object.keys(data)[columnIndex]];
-          });
-
-          // Process each row of Excel data and push it into the results array
-          results.push(transformedData);
         }
 
-        const savedData = [];
-
-        for (const data of results) {
-          const createOffenderData = new Offender(data);
-          console.log('Offender data before save:', createOffenderData);
-
-          const savedOffender = await createOffenderData.save();
-          console.log('Offender data after save:', savedOffender);
-
-          savedData.push(savedOffender);
+        if (headerRowIndex === -1) {
+          // Expected columns not found in the header row
+          reject(new Error('Expected columns not found in the header row'));
+          return;
         }
 
-        console.log('Data Saved to Database:', savedData);
+        // Check if all expected columns are present in the header row
+        const headerRow = rows[headerRowIndex].map(cell => cell.trim().toLowerCase()); // Convert header cells to lowercase
+        const missingColumns = expectedColumns.filter(column => !headerRow.includes(column.toLowerCase())); // Convert expected column names to lowercase for comparison
 
-        resolve({ message: 'File uploaded and data saved successfully', data: savedData });
+        if (missingColumns.length > 0) {
+          // Some expected columns are missing in the header row
+          const errorMessage = `Missing columns: ${missingColumns.join(', ')}`;
+          console.error(errorMessage);
+          reject(new Error(errorMessage));
+          return;
+        }
+
+        // Extract data from rows starting from the row after the header
+        for (let i = headerRowIndex + 1; i < rows.length; i++) {
+          const rowData = {};
+          const row = rows[i];
+
+          // Iterate over each column in the row
+          for (let j = 0; j < expectedColumns.length; j++) {
+            const columnName = expectedColumns[j];
+            const cellValue = row[j] || '';
+            console.log("This is the cell:", cellValue); // Use empty string if cell value is empty
+            rowData[columnName] = cellValue;
+          }
+          console.log(rowData);
+
+          // Save the rowData to Offender collection
+          const result = await Offender.create(rowData);
+          console.log('Data saved successfully:', result);
+          
+        }
+
+        console.log('File uploaded and data saved successfully');
+
+        resolve({ message: 'File uploaded and data saved successfully' });
       } catch (error) {
         reject(error);
       }
