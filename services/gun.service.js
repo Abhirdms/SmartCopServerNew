@@ -257,7 +257,7 @@ module.exports = {
         let headerRowIndex = -1;
         console.log(rows.length);
         for (let i = 0; i < rows.length; i++) {
-          const row = rows[i].map(cell => cell.toLowerCase());
+          const row = rows[i].map(cell => typeof cell === 'string' ? cell.toLowerCase() : cell);
           const foundColumns = row.filter(cell => expectedColumnsLowercase.includes(cell));
           if (foundColumns.length >= 5) {
             headerRowIndex = i;
@@ -282,16 +282,36 @@ module.exports = {
           reject(new Error(errorMessage));
           return;
         }
+          function excelSerialNumberToDate(serial) {
+          const utcDays = Math.floor(serial - 25569);
+          const utcValue = utcDays * 86400;
+          const dateInfo = new Date(utcValue * 1000);
+      
+          const day = String(dateInfo.getDate()).padStart(2, '0');
+          const month = String(dateInfo.getMonth() + 1).padStart(2, '0');
+          const year = dateInfo.getFullYear();
+      
+          return `${day}-${month}-${year}`;
+      }
+
 
         // Extract data from rows starting from the row after the header
         for (let i = headerRowIndex + 1; i < rows.length; i++) {
           const rowData = {};
           const row = rows[i];
 
+          const isEmptyRow = row.every(cell => cell === '');
+          if (isEmptyRow) {
+            continue;
+          }
+
           // Iterate over each column in the row
           for (let j = 0; j < expectedColumns.length; j++) {
             const columnName = expectedColumns[j];
-            const cellValue = row[j] || '';
+            let cellValue = row[j] || '';
+            if (columnName === 'Dob' || columnName === 'Dateofissue' || columnName === 'Dateofexpiry') {
+              cellValue = excelSerialNumberToDate(cellValue);
+          }
             console.log("This is the cell:", cellValue); // Use empty string if cell value is empty
             rowData[columnName] = cellValue;
           }
