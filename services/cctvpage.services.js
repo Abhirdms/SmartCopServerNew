@@ -82,7 +82,7 @@ module.exports = {
         // Find the header row
         let headerRowIndex = -1;
         for (let i = 0; i < rows.length; i++) {
-          const row = rows[i].map(cell => cell.toLowerCase());
+          const row = rows[i].map(cell => typeof cell === 'string' ? cell.trim().toLowerCase() : cell);
           const foundColumns = row.filter(cell =>  expectedColumnsLowercase.includes(cell));
           if (foundColumns.length === expectedColumns.length) {
             headerRowIndex = i;
@@ -96,7 +96,7 @@ module.exports = {
           return;
         }
 
-        const headerRow = rows[headerRowIndex].map(cell => cell.toLowerCase()); // Convert header cells to lowercase
+        const headerRow = rows[headerRowIndex].map(cell => cell.trim().toLowerCase()); // Convert header cells to lowercase
         const missingColumns = expectedColumns.filter(column => !headerRow.includes(column.toLowerCase())); // Convert expected column names to lowercase for comparison
 
         if (missingColumns.length > 0) {
