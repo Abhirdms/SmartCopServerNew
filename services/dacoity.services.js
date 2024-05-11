@@ -172,7 +172,7 @@ module.exports = {
         let headerRowIndex = -1;
         console.log(rows.length);
         for (let i = 0; i < rows.length; i++) {
-          const row = rows[i].map(cell => typeof cell === 'string' ? cell.toLowerCase() : cell);
+          const row = rows[i].map(cell => typeof cell === 'string' ? cell.trim().toLowerCase() : cell);
           const foundColumns = row.filter(cell => expectedColumnsLowercase.includes(cell));
           if (foundColumns.length >= 5) {
             headerRowIndex = i;
@@ -187,7 +187,7 @@ module.exports = {
         }
 
         // Check if all expected columns are present in the header row
-        const headerRow = rows[headerRowIndex].map(cell => cell.toLowerCase()); // Convert header cells to lowercase
+        const headerRow = rows[headerRowIndex].map(cell => cell.trim().toLowerCase()); // Convert header cells to lowercase
         const missingColumns = expectedColumns.filter(column => !headerRow.includes(column.toLowerCase())); // Convert expected column names to lowercase for comparison
 
         if (missingColumns.length > 0) {
