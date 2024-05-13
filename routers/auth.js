@@ -12,11 +12,15 @@ authRouter.post("/signup", async (req, res) => {
   try {
     const { name, email, password,gender,dob,post,contact,policeStation } = req.body;
 
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res
-        .status(400)
-        .json({ msg: "User with same email already exists!" });
+   const existingEmailUser = await User.findOne({ email });
+    if (existingEmailUser) {
+      return res.status(400).json({ msg: "User with the same email already exists!" });
+    }
+
+    // Check if a user with the same contact exists
+    const existingContactUser = await User.findOne({ contact });
+    if (existingContactUser) {
+      return res.status(400).json({ msg: "User with the same contact already exists!" });
     }
 
     const hashedPassword = crypto.createHash('sha256').update(password).digest('hex');
