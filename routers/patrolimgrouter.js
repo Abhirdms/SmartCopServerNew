@@ -25,7 +25,7 @@ router.post('/patrolimage', upload.single('image'), async (req, res) => {
   }
   
   try {
-    const { userId, userName, imageName, address, date, time } = req.body;
+    const { userId, userName, imageName, address, date, time,destinationid  } = req.body;
     // Create a new instance of the Mongoose model with the parsed data
     const patrolCheckin = new PatrolCheckin({
       userId,
@@ -34,7 +34,8 @@ router.post('/patrolimage', upload.single('image'), async (req, res) => {
       address,
       date,
       time,
-      imagePath: req.file.path, // Store the image path in the database
+      imagePath: req.file.path,
+      destinationid // Store the image path in the database
     });
 
     // Save the instance to the patrolcheckin collection in MongoDB
