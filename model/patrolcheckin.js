@@ -9,6 +9,7 @@ const patrolCheckinSchema = new mongoose.Schema({
   date: String,
   time: String,
   imagePath: String,
+  destinationid: String,
  
   
 });
