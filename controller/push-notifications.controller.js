@@ -43,18 +43,37 @@ async function sendNotification(tokens, userIds, title, body) {
   }
 }
 
-cron.schedule('08 16 * * *', async () => {
+
+const formatDate = (dateString) => {
+  // Split the date string by '-', '.', or ' '
+  const parts = dateString.split(/[-. ]/);
+  
+  // Extract day, month, and year
+  const day = parseInt(parts[0]);
+  const month = parseInt(parts[1]);
+  const year = parseInt(parts[2]);
+  
+  // Ensure day and month are formatted with leading zeros if needed
+  const formattedDay = day < 10 ? `0${day}` : day;
+  const formattedMonth = month < 10 ? `0${month}` : month;
+  
+  // Return formatted date in 'dd.mm.yyyy' format
+  return `${formattedDay}-${formattedMonth}-${year}`;
+};
+
+
+cron.schedule('43 14 * * *', async () => {
   try {
     // Get today's date
     const today = new Date();
     const dd = String(today.getDate()).padStart(2, '0');
     const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
     const yyyy = today.getFullYear();
-    const todayDate = `${dd}.${mm}.${yyyy}`;
+    const todayDate = `${dd}-${mm}-${yyyy}`;
     console.log(todayDate);
 
     // Find users whose date of release is today
-    const users = await User.find({ Dateofrelease: todayDate });
+    const users = await User.find({ Dateofrelease:formatDate(todayDate) });
     console.log(users);
 
     // Group users by police station
