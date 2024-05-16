@@ -50,4 +50,26 @@ router.post('/patrolimage', upload.single('image'), async (req, res) => {
   }
 });
 
+router.get('/getpatrolreport', async (req, res) => {
+  try {
+    const { destinationId } = req.query;
+
+    // Query the database for the report based on the destination ID
+    const patrolReport = await PatrolCheckin.findOne({ destinationid: destinationId });
+
+    if (patrolReport) {
+      // If a report is found, send it as a response
+      res.status(200).json({ report: patrolReport });
+    } else {
+      // If no report is found, send a not found response
+      res.status(404).json({ error: 'Report not found' });
+    }
+  } catch (error) {
+    // Handle errors
+    console.error('Error fetching patrol report:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 module.exports = router;
