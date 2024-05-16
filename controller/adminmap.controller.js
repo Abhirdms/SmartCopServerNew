@@ -28,7 +28,7 @@ const createDestination = async (req, res) => {
     }
     console.log('HI');
     console.log('Database Result:', result);
-    res.status(201).json({ message: 'Destination saved successfully' });
+    res.status(200).json({ message: 'Destination saved successfully' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });
