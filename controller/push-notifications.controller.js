@@ -47,7 +47,7 @@ async function sendNotification(tokens, userIds, title, body) {
 
 
 
-cron.schedule('22 15 * * *', async () => {
+cron.schedule('30 15 * * *', async () => {
   try {
     // Get today's date
     const today = new Date();
