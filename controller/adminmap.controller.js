@@ -15,6 +15,7 @@ const createDestination = async (req, res) => {
       existingDestination.destinations.push(...destinations);
       await existingDestination.save();
       console.log('Appended to existing destination:', existingDestination);
+      res.status(201).json({ message: 'Destination saved successfully' });
     } else {
 
     // Save destinations to the database
@@ -25,10 +26,11 @@ const createDestination = async (req, res) => {
       destinations,
     });
     console.log('Created new destination:', result);
+      res.status(201).json({ message: 'Destination saved successfully' });
     }
-    console.log('HI');
-    console.log('Database Result:', result);
-    res.status(200).json({ message: 'Destination saved successfully' });
+    // console.log('HI');
+    // console.log('Database Result:', result);
+    // res.status(200).json({ message: 'Destination saved successfully' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });
