@@ -144,9 +144,10 @@ const xlsx = require('xlsx');
 const Missing = require('../model/missed');
 
 module.exports = {
-  processUpload: async (file) => {
+  processUpload: async (req,file) => {
     return new Promise(async (resolve, reject) => {
       try {
+        if (file){
         if (!file.originalname.endsWith('.xlsx')) {
           // Unsupported file type
           reject(new Error('Unsupported file type'));
@@ -248,6 +249,12 @@ module.exports = {
         console.log('File uploaded and data saved successfully');
 
         resolve({ message: 'File uploaded and data saved successfully' });
+            }
+      else {
+        const data = req.body;
+          const result = await Missing.create(data);
+          resolve({ message: 'Data added successfully', result });
+        }
       } catch (error) {
         reject(error);
       }
