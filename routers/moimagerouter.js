@@ -1,5 +1,6 @@
 const express = require('express');
 const multer = require('multer');
+const Offender = require("../model/Offender");
 
 
 const router = express.Router();
@@ -15,8 +16,33 @@ const storage = multer.diskStorage({
 
   const upload = multer({ storage: storage });
 
+router.post('/offenderpicupdate', upload.single('file'), async (req, res) => {
+    try {
+      const { userId, imageName } = req.body;
+      console.log(req.body);
+  
+      // Find the missing person by ID and update the highQualityPhotographs field
+      const updateResult = await Offender.findByIdAndUpdate(
+        userId,
+        { $set: {  highqualityphotographs: imageName } },
+        { new: true, useFindAndModify: false }
+      );
+
+      if (!updateResult) {
+        return res.status(404).json({ message: 'Failed to update! Try again' });
+      }
+      
+  
+      res.status(200).json({ message: 'File uploaded and record updated successfully' });
+    } catch (error) {
+      console.error('Error updating the record:', error);
+      res.status(500).json({ message: 'Failed to upload file and update record', error });
+    }
+  });
+
+
   // Define a route for handling multiple image uploads
-  router.post('/moimage', upload.array('files', 10), (req, res) => {
+  router.post('/moimage', upload.single('files'), (req, res) => {
     // Handle the uploaded files
     const files = req.files;
   
