@@ -168,7 +168,6 @@ module.exports = {
           'Missingdate',
           'Missingplace',
           'Height',
-          'Highqualityphotographs',
           'Missingregno',
           'Policestation',
         ];
