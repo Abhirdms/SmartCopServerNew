@@ -17,7 +17,7 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const Offender = require("../model/Offender");
-const OffenderController = require("../controller/offenders.controller");
+const uploadController = require("../controller/offenders.controller");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/'); // Destination folder for uploaded files
@@ -28,14 +28,17 @@ const storage = multer.diskStorage({
 });
 // const upload = multer();
 const upload = multer({ storage: storage });
-const csvUpload = upload.single("file"); 
-router.post("/addOffender", csvUpload,OffenderController.offenderData);
-// router.get("/searchOffender", async (req, res) => {
-//   const searchQuery = req.query.name; // You should pass the 'name' as a query parameter
-//   const results = await Offender.find({ name: searchQuery });
-//   res.json(results);
-//   console.log(results);
-// });
+// const csvUpload = upload.single("file"); 
+router.post("/addOffender", upload.single('file'), async (req, res) => {
+  try {
+      const result = await uploadController.uploadFile(req,res);
+      res.status(200).json(result);
+    
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+});
 router.get("/searchVisitor", async (req, res) => {
   const searchQuery = req.query.name; // You should pass the 'name' as a query parameter
   const results = await Offender.find({ name: searchQuery });
