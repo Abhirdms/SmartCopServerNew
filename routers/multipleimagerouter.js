@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const router = express.Router();
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, 'missedimg/'); // Specify the destination folder
+      cb(null, 'images/'); // Specify the destination folder
     },
     filename: (req, file, cb) => {
       
