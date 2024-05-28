@@ -29,6 +29,10 @@ const userSchema = new mongoose.Schema({
     type: String, // 'admin' or 'user'
     required: true,
   },
+   status: {
+    type: String,
+    default: 'available',
+  },
   // You can add more fields as needed
 });
 
