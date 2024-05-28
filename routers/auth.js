@@ -34,7 +34,6 @@ authRouter.post("/signup", async (req, res) => {
       post,
       contact,
       policeStation,
-      status: 'available'
     });
     user = await user.save();
     res.json(user);
