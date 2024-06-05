@@ -5,16 +5,23 @@ const Admin = require('../model/admin');
 const authRouter = express.Router();
 const jwt = require("jsonwebtoken");
 const auth = require("../middleware/auth");
+require('dotenv').config();
+
+
+const ACCESS_CODE = process.env.ACCESS_CODE;
 
 
 // Sign Up
 authRouter.post("/signup", async (req, res) => {
   try {
-    const { name, email, password,gender,dob,post,contact,policeStation } = req.body;
+    const { name, accesscode, password,gender,dob,post,contact,policeStation } = req.body;
 
-   const existingEmailUser = await User.findOne({ email });
-    if (existingEmailUser) {
-      return res.status(400).json({ msg: "User with the same email already exists!" });
+   // const existingEmailUser = await User.findOne({ email });
+   //  if (existingEmailUser) {
+   //    return res.status(400).json({ msg: "User with the same email already exists!" });
+   //  }
+    if (accesscode !== ACCESS_CODE) {
+      return res.status(400).json({ msg: "Invalid access code!" });
     }
 
     // Check if a user with the same contact exists
@@ -26,7 +33,6 @@ authRouter.post("/signup", async (req, res) => {
     const hashedPassword = crypto.createHash('sha256').update(password).digest('hex');
 
     let user = new User({
-      email,
       password: hashedPassword,
       name,
       gender,
@@ -46,7 +52,7 @@ authRouter.post("/signup", async (req, res) => {
 
 authRouter.post("/userlogin", async (req, res) => {
   try {
-    const { phoneNumber, password } = req.body;
+    const { phoneNumber, password, accesscode } = req.body;
 
     // const admin = await Admin.findOne({ contact: phoneNumber });
 
@@ -63,6 +69,9 @@ authRouter.post("/userlogin", async (req, res) => {
 
 
     const user = await User.findOne({ contact: phoneNumber });
+      if (accesscode !== ACCESS_CODE) {
+      return res.status(400).json({ msg: "Invalid access code!" });
+    }
     if (!user) {
       return res
         .status(400)
