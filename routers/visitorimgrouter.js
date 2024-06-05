@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const Visitor = require('../model/visitor');
+const Offender=require('../model/Offender');
 
 const router = express.Router();
 
@@ -21,35 +22,75 @@ router.post('/visitorimg', upload.single('files'), (req, res) => {
   res.json({ message: 'File uploaded successfully' });
 });
 
+router.post('/submitVisitorFormData', async (req, res) => {
+  try {
+    const { offenderId,offenderName,crimeHead, visitorName, designation, visitingDate, duration, highQualityPhotographs } = req.body;
 
-router.post('/submitFormData', async (req, res) => {
-    try {
-      const { name, designation, uploadedFiles,crimeNumber } = req.body;
-  
-      console.log('Received form data:');
-      console.log('Name:', name);
-      console.log('Designation:', designation);
-      console.log('Uploaded Files:', uploadedFiles);
-      console.log('Crime Number:', crimeNumber);
-  
-      // Save the form data to the database using the Visitor model
+    // Check if the offender already exists
+    let existingVisitor = await Visitor.findOne({ offenderId });
+
+    if (existingVisitor) {
+      // Offender exists, append visitor data
+      existingVisitor.visitors.push({ visitorName, designation, visitingDate, duration, highQualityPhotographs });
+      await existingVisitor.save();
+    } else {
+      // Offender does not exist, create new visitor document
       const newVisitor = new Visitor({
-        name,
-        designation,
-        uploadedFiles,
-        isVisited: true,
-        crimeNumber
-         // Assuming the form submission implies a visit
+        offenderId,
+        offenderName,
+        crimeHead,
+        visitors: [{ visitorName, designation, visitingDate, duration, highQualityPhotographs }]
       });
-  
       await newVisitor.save();
-  
-      res.status(200).send('Form data saved successfully');
-    } catch (error) {
-      console.error('Error handling form submission:', error);
-      res.status(500).send('Internal Server Error');
     }
-  });
+
+    const offender = await Offender.findOneAndUpdate(
+      { _id: offenderId }, // Find the offender by ID
+      { $inc: { totalVisitors: 1 } }, // Increment totalVisitors by 1
+      { new: true } // Return the updated document
+    );
+
+    if (!offender) {
+      console.error('Offender not found');
+    }
+
+    res.status(200).json({ message: 'Data added successfully' });
+  } catch (error) {
+    console.error('Error: ', error);
+    res.status(500).json({ error: 'Failed to add data' });
+  }
+});
+//Notneeded
+
+
+// router.post('/submitVisitorFormData', async (req, res) => {
+//     try {
+//       const { name, designation, uploadedFiles,crimeNumber } = req.body;
+  
+//       console.log('Received form data:');
+//       console.log('Name:', name);
+//       console.log('Designation:', designation);
+//       console.log('Uploaded Files:', uploadedFiles);
+//       console.log('Crime Number:', crimeNumber);
+  
+//       // Save the form data to the database using the Visitor model
+//       const newVisitor = new Visitor({
+//         name,
+//         designation,
+//         uploadedFiles,
+//         isVisited: true,
+//         crimeNumber
+//          // Assuming the form submission implies a visit
+//       });
+  
+//       await newVisitor.save();
+  
+//       res.status(200).send('Form data saved successfully');
+//     } catch (error) {
+//       console.error('Error handling form submission:', error);
+//       res.status(500).send('Internal Server Error');
+//     }
+//   });
 
   router.get('/getVisitedCrimeNumbers', async (req, res) => {
     try {
@@ -62,26 +103,6 @@ router.post('/submitFormData', async (req, res) => {
     }
   });
 
-  // router.get('/fetchDetails/:crimeNumber', async (req, res) => {
-  //   try {
-  //     const crimeNumber = req.params.crimeNumber;
-  
-  //     // Find the visitor in the database based on the crime number
-  //     const visitor = await Visitor.findOne({ crimeNumber });
-  //     console.log(visitor);
-  
-  //     if (visitor) {
-  //       res.json(visitor);
-  //       console.log(visitor);
-  //     } else {
-  //       res.status(404).json({ error: 'Visitor not found' });
-  //       console.log("Not");
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching visitor details:', error);
-  //     res.status(500).json({ error: 'Internal Server Error' });
-  //   }
-  // });
   
   router.get('/fetchDetails/:crimeNumber', async (req, res) => {
     console.log("Hi");
@@ -108,38 +129,6 @@ router.post('/submitFormData', async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   });
-  
-  // Export the router
-  // router.get('/fetchDetails/:crimeNumber', async (req, res) => {
-  //   try {
-  //     let crimeNumber = req.params.crimeNumber;
-  
-  //     // Ensure that crimeNumber has a leading dot if necessary
-  //     // if (!crimeNumber.startsWith('.')) {
-  //     //   crimeNumber = `.${crimeNumber}`;
-  //     // }
-  
-  //     console.log('Request received for /fetchDetails/' + crimeNumber);
-  
-  //     // Find the visitor in the database based on the crime number
-  //     const visitor = await Visitor.findOne({ crimeNumber });
-  //     console.log('Visitor:', visitor);
-  
-  //     if (visitor) {
-  //       res.json(visitor);
-  //       console.log('Response sent:', visitor);
-  //     } else {
-  //       res.status(404).json({ error: 'Visitor not found' });
-  //       console.log('Not found');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching visitor details:', error);
-  //     res.status(500).json({ error: 'Internal Server Error' });
-  //   }
-  // });
-  
-  // Export the router
-
   
   
   
