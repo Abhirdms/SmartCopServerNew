@@ -45,6 +45,8 @@ const fcmtokenRouter = require('./routers/usertokenrouter');
 const buzzRouter = require('./routers/buzzrouter');
 const notificationRouter = require('./routers/notificationrouter');
 const patrolImageRouter = require('./routers/patrolimgrouter');
+const nakabandilocRouter = require('./routers/nakabandirouter');
+const nakabandireportRouter = require('./routers/nakabandireportrouter');
 
 
 
@@ -99,6 +101,8 @@ app.use('/', fcmtokenRouter);
 app.use('/', buzzRouter);
 app.use('/', notificationRouter);
 app.use('/',patrolImageRouter);
+app.use('/',nakabandilocRouter);
+app.use('/',nakabandireportRouter);
 app.use(express.json());
 
 // Middleware to parse form data
@@ -108,6 +112,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/moimages', express.static(path.join(__dirname, 'moimages')));
 app.use('/visitorimg', express.static(path.join(__dirname, 'visitor')));
+app.use('/nakabandiImg', express.static(path.join(__dirname, 'nakabandiImg')));
 // app.use('/uploads', express.static(path.join(__dirname, 'D:/FlutterProjects/first_flutter_application/server/uploads')));
 
 
